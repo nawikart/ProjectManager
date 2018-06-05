@@ -27,7 +27,10 @@ def update_project(project_id, title):
 
 def delete_project(project_id):
     db = DbManager()
-    project = db.delete(get_project(project_id))
+    # project = db.delete(get_project(project_id))
+    project = db.open().query(Project).filter(Project.id == project_id).one()
+    project = db.delete(project)
+                
     db.close()
     return project
 
@@ -41,6 +44,9 @@ def create_task(project_id, description):
     task.project_id = project_id
     return db.save(task)
 
+def get_task(task_id):
+    db = DbManager()
+    return db.open().query(Task).filter(Task.id == task_id).one()
 
 def get_all_tasks(project_id):
     db = DbManager()
